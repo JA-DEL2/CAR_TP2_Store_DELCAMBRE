@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Store management</title>
+</head>
+<body>
+<form action="/store/client/create"
+      method="POST">
+    Email <input name="email" required>
+    Mdp <input name="mdp" required>
+    Nom <input name="nom" required>
+    Prénom <input name="prenom" required>
+    <p th:text="${errorSub}"></p>
+    <input type="SUBMIT">
+</form>
+<form action="/store/client/login"
+      method="POST">
+    Email <input name="email" required>
+    Mdp <input name="mdp" required>
+    <p th:text="${errorLog}"></p>
+    <input type="SUBMIT">
+</form>
+</body>
+</html>
