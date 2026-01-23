@@ -30,7 +30,9 @@ public class ClientController {
         Client client = this.clientService.createClient(email,nom,prenom,mdp);
         if(client == null)
             return new RedirectView("/store/home");
-        return new RedirectView("/store/dashboard");
+        RedirectView dashboard = new RedirectView("/store/dashboard");
+        dashboard.addStaticAttribute("clientEmail", client.getEmail());
+        return dashboard;
     }
 
     @PostMapping("/store/client/login")
@@ -38,12 +40,10 @@ public class ClientController {
         Client client = this.clientService.loginClient(email,mdp);
         if(client == null)
             return new RedirectView("/store/home");
-        return new RedirectView("/store/dashboard");
-    }
 
-    @GetMapping("/store/dashboard")
-    public String connected() {
-        return "dashboard";
+        RedirectView dashboard = new RedirectView("/store/dashboard");
+        dashboard.addStaticAttribute("clientEmail", client.getEmail());
+        return dashboard;
     }
 
     @GetMapping("/store/client/logout")

@@ -5,7 +5,22 @@
     <title>Dashboard</title>
 </head>
 <body>
-<h2>You are connected !</h2>
-<a href="/store/client/logout">logout</a>
+    <h2>You are connected !</h2>
+    <a href="/store/client/logout">logout</a>
+
+    <p>Commandes : </p>
+
+    <table border="1">
+        <ul th:each="commande : ${commandes}">
+            <li><a th:text="${commande.nom}" ></a></li>
+        </ul>
+    </table>
+
+    <form action="/store/commande/create"
+          method="POST">
+        Nom <input name="nom" required>
+        <input type="SUBMIT">
+        <input type="hidden" name="clientEmail" th:value="${clientEmail}" />
+    </form>
 </body>
 </html>
