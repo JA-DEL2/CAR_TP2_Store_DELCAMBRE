@@ -53,4 +53,8 @@ public class Commande {
     public void addLigneCommande(LigneCommande ligneCommande) {
         this.lignesCommandes.add(ligneCommande);
     }
+
+    public void removeLigneCommande(LigneCommande ligneCommande) {
+        this.lignesCommandes.remove(ligneCommande);
+    }
 }

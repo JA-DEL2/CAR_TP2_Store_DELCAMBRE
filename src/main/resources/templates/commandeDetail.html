@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${commandeName}"></title>
+</head>
+<body>
+<table style="border: solid 1px black;">
+  <thead>
+    <tr>
+      <th>Libelle</th>
+      <th>Quantité</th>
+      <th>Prix U (€)</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody th:each="ligne : ${lignes}">
+    <tr>
+      <td><p th:text="${ligne.libelle}"></p></td>
+      <td><p th:text="${ligne.quantite}"></p></td>
+      <td><p th:text="${ligne.prixU}"></p></td>
+      <td><form action="/store/commande/lignes/delete"
+                method="POST">
+        <input type="hidden" name="ligneId" th:value="${ligne.id}" />
+        <input type="hidden" name="commandeId" th:value="${commandeId}" />
+        <button type="SUBMIT">❌</button>
+      </form></td>
+    </tr>
+  </tbody>
+</table>
+
+<form action="/store/commande/lignes"
+      method="POST">
+  Libelle <input name="libelle" required>
+  Quantite <input type=number name="quantite" required>
+  Prix U <input type=number step="0.01" name="prixU" required>
+  <input type="SUBMIT">
+  <input type="hidden" name="commandeId" th:value="${commandeId}" />
+</form>
+</body>
+</html>

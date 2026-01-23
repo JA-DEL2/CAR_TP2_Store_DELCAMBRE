@@ -12,7 +12,7 @@
 
     <table border="1">
         <ul th:each="commande : ${commandes}">
-            <li><a th:text="${commande.nom}" ></a></li>
+            <li><a th:text="${commande.nom}" th:href="@{/store/commande/lignes(commandeId=${commande.id})}"></a></li>
         </ul>
     </table>
 
@@ -20,7 +20,7 @@
           method="POST">
         Nom <input name="nom" required>
         <input type="SUBMIT">
-        <input type="hidden" name="clientEmail" th:value="${clientEmail}" />
+        <input type="hidden" name="clientEmail" th:value="${clientEmail}"/>
     </form>
 </body>
 </html>
