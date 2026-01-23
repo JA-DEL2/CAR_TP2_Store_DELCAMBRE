@@ -2,6 +2,7 @@ package car.tp1.controllers;
 
 import car.tp1.models.Client;
 import car.tp1.services.ClientService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,28 +27,31 @@ public class ClientController {
     }
 
     @PostMapping("/store/client/create")
-    public RedirectView createAuteur(@RequestParam String email, @RequestParam String mdp, @RequestParam String nom, @RequestParam String prenom) {
+    public RedirectView createClient(HttpSession session, @RequestParam String email, @RequestParam String mdp, @RequestParam String nom, @RequestParam String prenom) {
         Client client = this.clientService.createClient(email,nom,prenom,mdp);
         if(client == null)
             return new RedirectView("/store/home");
-        RedirectView dashboard = new RedirectView("/store/dashboard");
-        dashboard.addStaticAttribute("clientEmail", client.getEmail());
-        return dashboard;
+
+        session.setAttribute("clientEmail",client.getEmail());
+
+        return new RedirectView("/store/dashboard");
     }
 
     @PostMapping("/store/client/login")
-    public RedirectView createAuteur(@RequestParam String email, @RequestParam String mdp) {
+    public RedirectView createAuteur(HttpSession session, @RequestParam String email, @RequestParam String mdp) {
         Client client = this.clientService.loginClient(email,mdp);
         if(client == null)
             return new RedirectView("/store/home");
 
-        RedirectView dashboard = new RedirectView("/store/dashboard");
-        dashboard.addStaticAttribute("clientEmail", client.getEmail());
-        return dashboard;
+        session.setAttribute("clientEmail",client.getEmail());
+
+        return new RedirectView("/store/dashboard");
     }
 
     @GetMapping("/store/client/logout")
-    public RedirectView logout() {
+    public RedirectView logout(HttpSession session) {
+        session.setAttribute("clientEmail",null);
+        session.invalidate();
         return new RedirectView("/store/home");
     }
 }

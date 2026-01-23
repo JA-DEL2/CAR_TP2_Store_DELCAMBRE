@@ -4,6 +4,7 @@ import car.tp1.models.Commande;
 import car.tp1.models.LigneCommande;
 import car.tp1.services.CommandeService;
 import car.tp1.services.LigneCommandeService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +27,12 @@ public class LigneCommandeController {
     }
 
     @GetMapping("/store/commande/lignes")
-    public ModelAndView getLignesCommande(@RequestParam String commandeId) {
+    public ModelAndView getLignesCommande(HttpSession session, @RequestParam String commandeId) {
+
+        String clientEmail = (String) session.getAttribute("clientEmail");
+        if(clientEmail == null)
+            return new ModelAndView("home");
+
         List<LigneCommande> lignes = this.commandeService.getLignesCommandeByCommandeId(commandeId);
         Optional<Commande> commande = this.commandeService.getCommandeById(commandeId);
 
@@ -38,8 +44,13 @@ public class LigneCommandeController {
     }
 
     @PostMapping("/store/commande/lignes")
-    public RedirectView createLigne(@RequestParam String libelle, @RequestParam int quantite, @RequestParam float prixU,
+    public RedirectView createLigne(HttpSession session, @RequestParam String libelle, @RequestParam int quantite, @RequestParam float prixU,
                                       @RequestParam String commandeId) {
+
+        String clientEmail = (String) session.getAttribute("clientEmail");
+        if(clientEmail == null)
+            return new RedirectView("/store/home");
+
         LigneCommande ligne = this.ligneCommandeService.createLigneCommande(libelle,quantite,prixU);
         this.commandeService.addLigneCommande(ligne,commandeId);
 
@@ -50,7 +61,11 @@ public class LigneCommandeController {
     }
 
     @PostMapping("/store/commande/lignes/delete")
-    public RedirectView deleteLigne(@RequestParam String ligneId, @RequestParam String commandeId) {
+    public RedirectView deleteLigne(HttpSession session, @RequestParam String ligneId, @RequestParam String commandeId) {
+        String clientEmail = (String) session.getAttribute("clientEmail");
+        if(clientEmail == null)
+            return new RedirectView("/store/home");
+
         this.ligneCommandeService.deleteLigneCommande(ligneId,commandeId);
 
         StringBuilder url = new StringBuilder("/store/commande/lignes");

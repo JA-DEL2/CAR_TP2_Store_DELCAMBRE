@@ -3,6 +3,7 @@ package car.tp1.controllers;
 import car.tp1.models.Commande;
 import car.tp1.services.ClientService;
 import car.tp1.services.CommandeService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,11 @@ public class CommandeController {
     }
 
     @GetMapping("/store/dashboard")
-    public ModelAndView getCommandes(@RequestParam String clientEmail) {
+    public ModelAndView getCommandes(HttpSession session) {
+        String clientEmail = (String) session.getAttribute("clientEmail");
+        if(clientEmail == null)
+            return new ModelAndView("home");
+
         List<Commande> commandes = this.clientService.getCommandesByClientId(clientEmail);
 
         ModelAndView model = new ModelAndView("dashboard");
@@ -34,7 +39,11 @@ public class CommandeController {
     }
 
     @PostMapping("/store/commande/create")
-    public RedirectView createCommand(@RequestParam String nom, @RequestParam String clientEmail) {
+    public RedirectView createCommand(HttpSession session, @RequestParam String nom) {
+        String clientEmail = (String) session.getAttribute("clientEmail");
+        if(clientEmail == null)
+            return new RedirectView("/store/home");
+
         Commande commande = this.commandeService.createCommande(nom);
         this.clientService.addCommande(commande,clientEmail);
 
