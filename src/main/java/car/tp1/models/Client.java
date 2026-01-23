@@ -2,6 +2,9 @@ package car.tp1.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+import java.util.List;
 
 @Entity
 public class Client {
@@ -12,6 +15,9 @@ public class Client {
     private String nom;
     private String prenom;
     private String mdp;
+
+    @OneToMany
+    private List<Commande> commandes;
 
     private boolean isConnected;
 
@@ -64,5 +70,17 @@ public class Client {
 
     public void setConnected(boolean connected) {
         isConnected = connected;
+    }
+
+    public List<Commande> getCommandes() {
+        return commandes;
+    }
+
+    public void setCommandes(List<Commande> commandes) {
+        this.commandes = commandes;
+    }
+
+    public void addCommande(Commande commande) {
+        this.commandes.add(commande);
     }
 }

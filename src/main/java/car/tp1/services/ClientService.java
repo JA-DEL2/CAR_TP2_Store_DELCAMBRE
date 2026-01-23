@@ -1,9 +1,13 @@
 package car.tp1.services;
 
 import car.tp1.models.Client;
+import car.tp1.models.Commande;
 import car.tp1.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ClientService {
@@ -29,6 +33,22 @@ public class ClientService {
 
     public Iterable<Client> getAllClients() {
         return this.clientRepository.findAll();
+    }
+
+    public void addCommande(Commande commande, String email) {
+        Client client = this.clientRepository.findByEmailIgnoreCase(email);
+        if(client != null) {
+            client.addCommande(commande);
+            this.clientRepository.save(client);
+        }
+    }
+
+    public List<Commande> getCommandesByClientId(String email){
+        Client client = this.clientRepository.findByEmailIgnoreCase(email);
+        if(client != null) {
+            return client.getCommandes();
+        }
+        return new ArrayList<>();
     }
 
 }
