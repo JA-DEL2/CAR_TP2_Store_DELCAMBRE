@@ -44,6 +44,7 @@ public class LigneCommandeController {
         model.addObject("commandeName",commande.get().getNom());
         model.addObject("commandeId",commandeId);
         model.addObject("isPurchased",commande.get().isPurchased());
+        model.addObject("totalPrice",this.commandeService.getPrixTotal(commandeId));
         return model;
     }
 

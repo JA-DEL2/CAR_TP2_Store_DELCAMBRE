@@ -12,16 +12,18 @@
   <thead>
     <tr>
       <th>Libelle</th>
-      <th>Quantité</th>
       <th>Prix U (€)</th>
+      <th>Quantité</th>
+      <th>Prix (€)</th>
       <th th:if="${!isPurchased}">Action</th>
     </tr>
   </thead>
   <tbody th:each="ligne : ${lignes}">
     <tr>
       <td><p th:text="${ligne.libelle}"></p></td>
-      <td><p th:text="${ligne.quantite}"></p></td>
       <td><p th:text="${ligne.prixU}"></p></td>
+      <td><p th:text="${ligne.quantite}"></p></td>
+      <td><p th:text="${ligne.quantite * ligne.prixU}"></p></td>
       <td><form action="/store/commande/lignes/delete"
                 method="POST" th:if="${!isPurchased}">
         <input type="hidden" name="ligneId" th:value="${ligne.id}" />
@@ -31,7 +33,9 @@
     </tr>
   </tbody>
 </table>
+<p>Prix total : <span th:text="${totalPrice}"></span></p>
 
+<div class="forms" th:if="${!isPurchased}">
 <form action="/store/commande/lignes"
       method="POST">
   Libelle <input name="libelle" required>
@@ -45,5 +49,8 @@
   <input type="hidden" name="commandeId" th:value="${commandeId}" />
   <button type="submit">Passer la commande</button>
 </form>
+</div>
+
+<a href="/store/dashboard">Retour</a>
 </body>
 </html>

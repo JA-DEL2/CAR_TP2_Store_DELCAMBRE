@@ -62,4 +62,14 @@ public class CommandeService {
         });
     }
 
+    public float getPrixTotal(String commandeId) {
+        Optional<Commande> commande = this.commandeRepository.findById(commandeId);
+        float somme = 0;
+        if(commande.isPresent()) {
+            for(LigneCommande ligne : commande.get().getLignesCommandes())
+                somme += ligne.getPrixU()*ligne.getQuantite();
+        };
+        return somme;
+    }
+
 }
