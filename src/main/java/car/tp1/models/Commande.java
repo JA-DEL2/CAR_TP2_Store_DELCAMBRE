@@ -16,14 +16,18 @@ public class Commande {
 
     private String nom;
 
+    private boolean purchased;
+
     @OneToMany
     private List<LigneCommande> lignesCommandes;
 
     public Commande(String nom) {
         this.nom = nom;
+        this.purchased = false;
     }
 
     public Commande() {
+        this.purchased = false;
     }
 
     public String getId() {
@@ -40,6 +44,14 @@ public class Commande {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public boolean isPurchased() {
+        return purchased;
+    }
+
+    public void setPurchased(boolean purchased) {
+        this.purchased = purchased;
     }
 
     public List<LigneCommande> getLignesCommandes() {

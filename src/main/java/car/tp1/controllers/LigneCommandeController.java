@@ -40,6 +40,7 @@ public class LigneCommandeController {
         model.addObject("lignes",lignes);
         model.addObject("commandeName",commande.get().getNom());
         model.addObject("commandeId",commandeId);
+        model.addObject("isPurchased",commande.get().isPurchased());
         return model;
     }
 

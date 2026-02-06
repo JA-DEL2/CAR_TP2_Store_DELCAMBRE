@@ -5,13 +5,16 @@
     <title th:text="${commandeName}"></title>
 </head>
 <body>
+
+<p th:if="${isPurchased}"> Commande passée ! </p>
+
 <table style="border: solid 1px black;">
   <thead>
     <tr>
       <th>Libelle</th>
       <th>Quantité</th>
       <th>Prix U (€)</th>
-      <th>Action</th>
+      <th th:if="${!isPurchased}">Action</th>
     </tr>
   </thead>
   <tbody th:each="ligne : ${lignes}">
@@ -20,7 +23,7 @@
       <td><p th:text="${ligne.quantite}"></p></td>
       <td><p th:text="${ligne.prixU}"></p></td>
       <td><form action="/store/commande/lignes/delete"
-                method="POST">
+                method="POST" th:if="${!isPurchased}">
         <input type="hidden" name="ligneId" th:value="${ligne.id}" />
         <input type="hidden" name="commandeId" th:value="${commandeId}" />
         <button type="SUBMIT">❌</button>
@@ -36,6 +39,10 @@
   Prix U <input type=number step="0.01" name="prixU" required>
   <input type="SUBMIT">
   <input type="hidden" name="commandeId" th:value="${commandeId}" />
+</form>
+
+<form action="/store/commande/submit">
+  <button type="submit">Passer la commande</button>
 </form>
 </body>
 </html>
