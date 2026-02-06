@@ -1,9 +1,7 @@
 package car.tp1.services;
 
-import car.tp1.models.Client;
 import car.tp1.models.Commande;
 import car.tp1.models.LigneCommande;
-import car.tp1.repositories.ClientRepository;
 import car.tp1.repositories.CommandeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +9,6 @@ import java.util.Optional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CommandeService {
@@ -62,14 +59,15 @@ public class CommandeService {
         });
     }
 
-    public float getPrixTotal(String commandeId) {
+    public double getPrixTotal(String commandeId) {
         Optional<Commande> commande = this.commandeRepository.findById(commandeId);
-        float somme = 0;
+        double somme = 0;
         if(commande.isPresent()) {
             for(LigneCommande ligne : commande.get().getLignesCommandes())
                 somme += ligne.getPrixU()*ligne.getQuantite();
         };
-        return somme;
+        return Math.round(somme * 100.0) / 100.0;
+        //XX.YYYY * 100 = XXYY.YY -> ROUND = XXYY -> /100 = XX.YY
     }
 
 }

@@ -49,7 +49,7 @@ public class LigneCommandeController {
     }
 
     @PostMapping("/store/commande/lignes")
-    public RedirectView createLigne(HttpSession session, @RequestParam String libelle, @RequestParam int quantite, @RequestParam float prixU,
+    public RedirectView createLigne(HttpSession session, @RequestParam String libelle, @RequestParam int quantite, @RequestParam double prixU,
                                       @RequestParam String commandeId) {
 
         String clientEmail = (String) session.getAttribute("clientEmail");

@@ -20,7 +20,7 @@ public class LigneCommandeService {
         this.commandeService = commandeService;
     }
 
-    public LigneCommande createLigneCommande(String libelle, int quantite, float prixU) {
+    public LigneCommande createLigneCommande(String libelle, int quantite, double prixU) {
         return this.ligneCommandeRepository.save(new LigneCommande(libelle,quantite,prixU));
     }
 

@@ -13,9 +13,9 @@ public class LigneCommande {
 
     private String libelle;
     private int quantite;
-    private float prixU;
+    private double prixU;
 
-    public LigneCommande(String libelle, int quantite, float prixU) {
+    public LigneCommande(String libelle, int quantite, double prixU) {
         this.libelle = libelle;
         this.quantite = quantite;
         this.prixU = prixU;
@@ -48,11 +48,11 @@ public class LigneCommande {
         this.quantite = quantite;
     }
 
-    public float getPrixU() {
+    public double getPrixU() {
         return prixU;
     }
 
-    public void setPrixU(float prixU) {
+    public void setPrixU(double prixU) {
         this.prixU = prixU;
     }
 }
