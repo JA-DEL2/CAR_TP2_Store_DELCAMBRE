@@ -3,6 +3,7 @@ package car.tp1.controllers;
 import car.tp1.models.Commande;
 import car.tp1.models.LigneCommande;
 import car.tp1.services.CommandeService;
+import car.tp1.services.KafkaProducer;
 import car.tp1.services.LigneCommandeService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -20,10 +21,12 @@ public class LigneCommandeController {
 
     private LigneCommandeService ligneCommandeService;
     private CommandeService commandeService;
+    private final KafkaProducer kafkaProducer;
 
-    public LigneCommandeController(LigneCommandeService ligneCommandeService, CommandeService commandeService) {
+    public LigneCommandeController(LigneCommandeService ligneCommandeService, CommandeService commandeService, KafkaProducer kafkaProducer) {
         this.ligneCommandeService = ligneCommandeService;
         this.commandeService = commandeService;
+        this.kafkaProducer = kafkaProducer;
     }
 
     @GetMapping("/store/commande/lignes")
@@ -68,6 +71,33 @@ public class LigneCommandeController {
             return new RedirectView("/store/home");
 
         this.ligneCommandeService.deleteLigneCommande(ligneId,commandeId);
+
+        StringBuilder url = new StringBuilder("/store/commande/lignes");
+        url.append("?commandeId=").append(commandeId);
+
+        return new RedirectView(url.toString());
+    }
+
+    @PostMapping("/store/commande/submit")
+    public RedirectView submitCommande(HttpSession session, @RequestParam String commandeId) {
+        String clientEmail = (String) session.getAttribute("clientEmail");
+        if(clientEmail == null)
+            return new RedirectView("/store/home");
+
+        List<LigneCommande> lignes = this.commandeService.getLignesCommandeByCommandeId(commandeId);
+
+        for( LigneCommande ligne : lignes) {
+            String message = String.format(
+                    //Kafka supporte (normalement) naturellement le json sous ce format
+                    "{\"libelle\":\"%s\",\"quantite\":%d}",
+                    ligne.getLibelle(),
+                    -ligne.getQuantite()
+            );
+
+            kafkaProducer.produce(message);
+        }
+
+        this.commandeService.purchaseCommande(commandeId);
 
         StringBuilder url = new StringBuilder("/store/commande/lignes");
         url.append("?commandeId=").append(commandeId);

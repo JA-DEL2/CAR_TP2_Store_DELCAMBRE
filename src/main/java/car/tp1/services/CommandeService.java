@@ -54,4 +54,12 @@ public class CommandeService {
         return new ArrayList<>();
     }
 
+    public void purchaseCommande(String commandeId) {
+        Optional<Commande> commande = this.commandeRepository.findById(commandeId);
+        commande.ifPresent( cmd -> {
+            cmd.setPurchased(true);
+            this.commandeRepository.save(cmd);
+        });
+    }
+
 }
